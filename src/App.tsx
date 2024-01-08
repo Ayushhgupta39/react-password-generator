@@ -84,7 +84,7 @@ function App() {
           </InputRightAddon>
         </InputGroup>
 
-        <Flex flexDirection={["column", "", "row"]} alignContent={"center"} justifyContent={"space-between"} margin={2}>
+        <Flex flexDirection={["column", "column", "row"]} alignContent={"center"} justifyContent={"space-between"} margin={2}>
           <Flex justifyContent={["center", "", ""]} alignContent={"center"} gap={2} marginY={["4", "", ""]}>
             <input
               onChange={(e) => {
