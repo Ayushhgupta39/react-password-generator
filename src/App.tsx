@@ -4,6 +4,7 @@ import {
   InputGroup,
   InputRightAddon,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { CopyIcon } from "@radix-ui/react-icons";
@@ -13,10 +14,11 @@ function App() {
   const [includeNum, setIncludeNum] = useState<boolean>(false);
   const [includeChar, setIncludeChar] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const toast = useToast();
 
   const generatePassword = useCallback(() => {
-    let pass = "";
-    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let pass:string = "";
+    let str:string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     if (includeNum) str += "0123456789";
     if (includeChar) str += "!@#$%^&*()_~";
@@ -29,6 +31,19 @@ function App() {
 
     setPassword(pass);
   }, [includeNum, includeChar, setPassword, length]);
+
+  const copyPassword = useCallback(() => {
+   
+      navigator.clipboard.writeText(password);
+      toast({
+        title: 'Password copied.',
+        description: "The password is copied to clipboard.",
+        position: "top",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+  }, [password, toast])
 
   useEffect(() => {
     generatePassword();
@@ -65,12 +80,12 @@ function App() {
             color={"black"}
           />
           <InputRightAddon>
-            <CopyIcon color="black" />
+            <CopyIcon cursor={"pointer"} onClick={copyPassword} color="black" />
           </InputRightAddon>
         </InputGroup>
 
-        <Flex alignContent={"center"} justifyContent={"space-between"} margin={2}>
-          <Flex alignContent={"center"} gap={2}>
+        <Flex flexDirection={["column", "", "row"]} alignContent={"center"} justifyContent={"space-between"} margin={2}>
+          <Flex justifyContent={["center", "", ""]} alignContent={"center"} gap={2} marginY={["4", "", ""]}>
             <input
               onChange={(e) => {
                 setLength(parseInt(e.target.value, 10));
@@ -79,10 +94,11 @@ function App() {
               value={length}  
               min={6}
               max={50}
+              className="length_input"
             />
             <label htmlFor="length">Length: {length}</label>
           </Flex>
-          <Flex gap={2}>
+          <Flex  justifyContent={["center", "", ""]} gap={2} marginY={["4", "", ""]}>
             <Flex gap={1} alignItems={"center"}>
               <input
                 type="checkbox"
